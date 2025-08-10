@@ -83,3 +83,47 @@ class KinematicVector:
         if type(self.z) != float:
             self.z = float(self.z)
             print("z-coordinate changed to float")
+
+    def __neg__(self):
+        """function inverting a vector
+        :return: inverted vector"""
+        return KinematicVector(-self.x, -self.y, -self.z)
+
+    def __abs__(self):
+        """function returning a vector's length
+        :return: vector's length"""
+        return self.length()
+
+    def __add__(self, other):
+        """function summing two vectors
+        :param other: second vector to add
+        :return: sum of the vectors"""
+        if type(other) != KinematicVector:
+            raise Exception(f"The {other} argument has an incorrect type {type(other)}")
+        return KinematicVector(self.x + other.x, self.y + other.y, self.z + other.z)
+
+    def __sub__(self, other):
+        """function subtracting two vectors
+        :param other: second vector to subtract
+        :return: difference of the vectors"""
+        if type(other) != KinematicVector:
+            raise Exception(f"The {other} argument has an incorrect type {type(other)}")
+        return KinematicVector(self.x - other.x, self.y - other.y, self.z - other.z)
+
+    def __mul__(self, other):
+        """function multiplying scalar and a vector
+        :param other: number to multiply
+        :return: vectors multiplied by the scalar"""
+        if type(other) not in TYPES_TO_FLOAT:
+            raise Exception(f"The {other} argument has an incorrect type {type(other)}")
+        return KinematicVector(self.x * other, self.y * other, self.z * other)
+
+    def __truediv__(self, other):
+        """function dividing vector by a scalar
+        :param other: number to divide
+        :return: vectors multiplied by the scalar"""
+        if type(other) not in TYPES_TO_FLOAT:
+            raise Exception(f"The {other} argument has an incorrect type {type(other)}")
+        if other == 0:
+            raise Exception(f"Cannot divide by zero")
+        return KinematicVector(self.x / other, self.y / other, self.z / other)
