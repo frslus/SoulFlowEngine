@@ -59,18 +59,18 @@ class KinematicVector:
                     continue
                 raise Exception(f"Incorrect keyword argument: {str(key)}")
 
-    def __repr__(self):
-        """function returning a string representation of the vector
+    def __repr__(self) -> str:
+        """method returning a string representation of the vector
         :return: a string representation of the vector"""
         return f"[x = {self.x:.8f}, y = {self.y:.8f}, z = {self.z:.8f}]"
 
-    def length(self):
-        """function returning the length of the vector
+    def length(self) -> float:
+        """method returning the length of the vector
         :return: length of the vector"""
         return math.sqrt(self.x ** 2 + self.y ** 2 + self.z ** 2)
 
-    def check_types(self):
-        """function checking the types of the coordinates - if they
+    def check_types(self) -> None:
+        """method checking the types of the coordinates - if they
         are different then float, they can be changed if possible.
         The adequate communicates are displayed by the console.
         :return: None"""
@@ -84,42 +84,42 @@ class KinematicVector:
             self.z = float(self.z)
             print("z-coordinate changed to float")
 
-    def __neg__(self):
-        """function inverting a vector
+    def __neg__(self) -> 'KinematicVector':
+        """method inverting a vector
         :return: inverted vector"""
         return KinematicVector(-self.x, -self.y, -self.z)
 
-    def __abs__(self):
-        """function returning a vector's length
+    def __abs__(self) -> float:
+        """method returning a vector's length
         :return: vector's length"""
         return self.length()
 
-    def __add__(self, other):
-        """function summing two vectors
+    def __add__(self, other) -> 'KinematicVector':
+        """method summing two vectors
         :param other: second vector to add
         :return: sum of the vectors"""
         if type(other) != KinematicVector:
             raise Exception(f"The {other} argument has an incorrect type {type(other)}")
         return KinematicVector(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(self, other):
-        """function subtracting two vectors
+    def __sub__(self, other) -> 'KinematicVector':
+        """method subtracting two vectors
         :param other: second vector to subtract
         :return: difference of the vectors"""
         if type(other) != KinematicVector:
             raise Exception(f"The {other} argument has an incorrect type {type(other)}")
         return KinematicVector(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, other):
-        """function multiplying scalar and a vector
+    def __mul__(self, other) -> 'KinematicVector':
+        """method multiplying scalar and a vector
         :param other: number to multiply
         :return: vectors multiplied by the scalar"""
         if type(other) not in TYPES_TO_FLOAT:
             raise Exception(f"The {other} argument has an incorrect type {type(other)}")
         return KinematicVector(self.x * other, self.y * other, self.z * other)
 
-    def __truediv__(self, other):
-        """function dividing vector by a scalar
+    def __truediv__(self, other) -> 'KinematicVector':
+        """method dividing vector by a scalar
         :param other: number to divide
         :return: vectors multiplied by the scalar"""
         if type(other) not in TYPES_TO_FLOAT:
@@ -127,3 +127,22 @@ class KinematicVector:
         if other == 0:
             raise Exception(f"Cannot divide by zero")
         return KinematicVector(self.x / other, self.y / other, self.z / other)
+
+    def __matmul__(self, other) -> float:
+        """method calculating scalar product of two vectors
+        :param other: second vector
+        :return: scalar product of vectors"""
+        return self.x * other.x + self.y * other.y + self.z * other.z
+
+    def copy(self) -> 'KinematicVector':
+        """method returning a copy of the vector
+        :return: new vector identical to the original vector"""
+        return KinematicVector(self.x, self.y, self.z)
+
+
+def vector_projection(u, v) -> (KinematicVector, KinematicVector):
+    """function calculating the projection of a vector u on the vector v
+    :return: parallel and orthogonal (to the vector v) compound of the vector u"""
+    alpha = (u @ v) / (v @ v)
+    u_star = u * alpha
+    return u_star, v - u_star
